@@ -1,0 +1,168 @@
+[Wed May 27 00:07:29 2020] ./a.out -m src dst 
+	스크린샷, 2020-05-25 16-32-57.png delete
+	test delete
+	record delete
+	person.h delete
+	makefile delete
+	main.c delete
+	foreground.c delete
+	backup.tar delete
+	backup.c delete
+	background.c delete
+	a.out delete
+	20162484 delete
+[Wed May 27 00:15:14 2020] ./a.out -t ../main.c dst 
+	totalSize 10240bytes
+	main.c
+[Wed May 27 00:21:55 2020] ./a.out -t main.c dst 
+	totalSize 10240bytes
+	main.c
+[Wed May 27 00:23:11 2020] ./a.out -t makefile dst 
+	totalSize 10240bytes
+	makefile
+[Wed May 27 00:25:30 2020] ./a.out -t /home/goodtss/lsp dst 
+	totalSize 2191360bytes
+	20162484/
+	20162484/#P2_20162484_ver1.9.zip
+	20162484/background.exe
+	20162484/#P2_20162484_ver1.2.zip
+	20162484/#P2_20162484_ver1.6.zip
+	20162484/#P2_20162484_ver1.4.zip
+	20162484/#P2_20162484_ver1.8.zip
+	20162484/makefile
+	20162484/#P2_20162484_ver1.8/
+	20162484/#P2_20162484_ver1.8/background.exe
+	20162484/#P2_20162484_ver1.8/makefile
+	20162484/#P2_20162484_ver1.8/main.o
+	20162484/#P2_20162484_ver1.8/log.txt
+	20162484/#P2_20162484_ver1.8/background.c
+	20162484/#P2_20162484_ver1.8/foreground.o
+	20162484/#P2_20162484_ver1.8/foreground.c
+	20162484/#P2_20162484_ver1.8/ssu_mntr
+	20162484/#P2_20162484_ver1.8/trash/
+	20162484/#P2_20162484_ver1.8/trash/files/
+	20162484/#P2_20162484_ver1.8/trash/info/
+	20162484/#P2_20162484_ver1.8/main.c
+	20162484/#P2_20162484_ver1.8/check/
+	20162484/#P2_20162484_ver1.8/check/a
+	20162484/main.o
+	20162484/log.txt
+	20162484/background.c
+	20162484/foreground.o
+	20162484/#P2_20162484_ver1.5.zip
+	20162484/foreground.c
+	20162484/ssu_mntr
+	20162484/#P2_20162484_ver1.3.zip
+	20162484/patch.txt
+	20162484/#P2_20162484_ver2.0/
+	20162484/#P2_20162484_ver2.0/스크린샷, 2020-05-11 02-03-06.png
+	20162484/#P2_20162484_ver2.0/스크린샷, 2020-05-11 02-04-06.png
+	20162484/#P2_20162484_ver2.0/스크린샷, 2020-05-11 11-13-55.png
+	20162484/#P2_20162484_ver2.0/스크린샷, 2020-05-11 11-27-15.png
+	20162484/#P2_20162484_ver2.0/스크린샷, 2020-05-11 11-26-49.png
+	20162484/#P2_20162484_ver2.0/makefile
+	20162484/#P2_20162484_ver2.0/main.o
+	20162484/#P2_20162484_ver2.0/#P2_20162484_ver2.2.zip
+	20162484/#P2_20162484_ver2.0/log.txt
+	20162484/#P2_20162484_ver2.0/background.c
+	20162484/#P2_20162484_ver2.0/foreground.o
+	20162484/#P2_20162484_ver2.0/foreground.c
+	20162484/#P2_20162484_ver2.0/ssu_mntr
+	20162484/#P2_20162484_ver2.0/trash/
+	20162484/#P2_20162484_ver2.0/trash/files/
+	20162484/#P2_20162484_ver2.0/trash/files/b
+	20162484/#P2_20162484_ver2.0/trash/files/c
+	20162484/#P2_20162484_ver2.0/trash/files/c_1
+	20162484/#P2_20162484_ver2.0/trash/info/
+	20162484/#P2_20162484_ver2.0/trash/info/b
+	20162484/#P2_20162484_ver2.0/trash/info/c
+	20162484/#P2_20162484_ver2.0/trash/info/c_1
+	20162484/#P2_20162484_ver2.0/main.c
+	20162484/#P2_20162484_ver2.0/check/
+	20162484/#P2_20162484_ver2.0/check/a
+	20162484/#P2_20162484_ver1.7.zip
+	20162484/trash/
+	20162484/trash/files/
+	20162484/trash/files/q
+	20162484/trash/files/i
+	20162484/trash/files/h
+	20162484/trash/files/p
+	20162484/trash/files/u
+	20162484/trash/files/j
+	20162484/trash/files/l
+	20162484/trash/files/m
+	20162484/trash/files/o
+	20162484/trash/files/g
+	20162484/trash/files/r
+	20162484/trash/files/d
+	20162484/trash/files/f
+	20162484/trash/files/s
+	20162484/trash/files/k
+	20162484/trash/files/t
+	20162484/trash/files/patch.txt
+	20162484/trash/files/n
+	20162484/trash/files/e
+	20162484/trash/files/c
+	20162484/trash/info/
+	20162484/trash/info/q
+	20162484/trash/info/i
+	20162484/trash/info/h
+	20162484/trash/info/p
+	20162484/trash/info/u
+	20162484/trash/info/j
+	20162484/trash/info/l
+	20162484/trash/info/m
+	20162484/trash/info/o
+	20162484/trash/info/g
+	20162484/trash/info/r
+	20162484/trash/info/d
+	20162484/trash/info/f
+	20162484/trash/info/s
+	20162484/trash/info/k
+	20162484/trash/info/t
+	20162484/trash/info/patch.txt
+	20162484/trash/info/n
+	20162484/trash/info/e
+	20162484/trash/info/c
+	20162484/main.c
+	20162484/#P2_20162484_ver2.0.zip
+	20162484/check/
+	20162484/check/adadad/
+	20162484/check/echomsg.txt
+	20162484/check/asdsada/
+	20162484/check/asdsada/dasdas/
+	20162484/check/dir1/
+	20162484/check/dir1/nested/
+	20162484/check/dir1/nested2/
+	20162484/check/dasdsa/
+	a.out
+	background.c
+	backup.c
+	backup.tar
+	foreground.c
+	main.c
+	makefile
+	person.h
+	record
+	test/
+	test/background.c
+	스크린샷, 2020-05-25 16-32-57.png
+[Wed May 27 00:27:06 2020] ./a.out -m src dst 
+	스크린샷, 2020-05-25 16-32-57.png delete
+	test delete
+	record delete
+	person.h delete
+	makefile delete
+	main.c delete
+	foreground.c delete
+	backup.tar delete
+	backup.c delete
+	background.c delete
+	a.out delete
+	20162484 delete
+[Wed May 27 00:33:10 2020] ./a.out -t makefile dst 
+	totalSize 10240bytes
+	makefile
+[Wed May 27 01:30:52 2020] ./ssu_rsync -m src dst 
+	makefile delete
+	main.c delete
