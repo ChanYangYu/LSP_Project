@@ -13,9 +13,6 @@ int command_num = 0;
 void execute_add(FILE* fp, char* cmd);
 int check_run_cycle(char* cmd, int index);
 void execute_remove(FILE* fp, char* cmd);
-void start_service(void);
-void make_service_file(void);
-
 
 //ssu_crontab
 int main(void)
@@ -27,8 +24,6 @@ int main(void)
 	char* ptr;
 	int i;
 
-	//crond서비스 등록
-	start_service();
 	//ssu_crontab_file이 존재하지않으면 생성
 	if(access(fname,F_OK) != 0){
 		if((fp = fopen(fname,"w+")) == NULL){
@@ -448,46 +443,4 @@ void execute_remove(FILE* fp, char* cmd)
 	//로그입력
 	fprintf(log, "[%s] remove %s",ptr, ptr2);
 	fclose(log);
-}
-
-void start_service(void)
-{
-    uid_t uid;
-    int backup;
-
-    uid = getuid();
-    if(uid != 0){
-        fprintf(stderr,"Error 0 : ssu_crond 데몬을 실행을 위해서는 root 권한이 필요합니다.\n");
-        return;
-    }
-    //service파일 유무확인
-    if(access("/etc/systemd/system/crond_2484.service",F_OK) != 0)
-        make_service_file();
-    backup = dup(2);
-    close(2);
-    system("systemctl enable crond_2484.service");
-    system("systemctl start crond_2484.service");
-    dup2(backup,2);
-    close(backup);
-}
-
-void make_service_file(void)
-{
-    FILE* fp;
-    char path[BUFFER_SIZE];
-
-    getcwd(path,BUFFER_SIZE);
-
-    if((fp = fopen("crond_2484.service","w+")) == NULL){
-        fprintf(stderr,"make_serive_file create fail\n");
-        exit(1);
-
-    }
-    fprintf(fp,"[Unit]\nDescription=crond_20162484\n\n");
-    fprintf(fp,"[Service]\nExecStart=%s/ssu_crond\nWorkingDirectory=%s\n",
-            path,path);
-    fprintf(fp,"\n[Install]\nWantedBy=multi-user.target\n");
-    fclose(fp);
-    system("mv crond_2484.service /etc/systemd/system/crond_2484.service");
-    system("systemctl daemon-reload");
 }
