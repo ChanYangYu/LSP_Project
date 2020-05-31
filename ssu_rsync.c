@@ -9,6 +9,9 @@
 #include <time.h>
 #include <dirent.h>
 #include <fcntl.h>
+#include <utime.h>
+#include <sys/wait.h>
+#include <dirent.h>
 
 #define BUFFER_SIZE 1024
 
@@ -34,6 +37,7 @@ int is_file = 0;
 void catch_signal(int signo);
 void record_log(int argc, char* argv[]);
 void sync_execute(char* src, char* dst);
+int rmdirs(char *pathname, int mode);
 void execute_rOption(char* src, char* dst, char* src_dir);
 void execute_tOption(char* dst);
 void sub_file_permission(char* dir_path);
@@ -127,13 +131,14 @@ int main(int argc, char* argv[])
 	for(i = 0; i < count; i++)
 		free(old_list[i]);
 	free(old_list);
-	system("rm -r ssu_rsync_log_temp");
-	system("rm -r backup_2484.tar");
+	remove("ssu_rsync_log_temp");
+	remove("backup_2484.tar");
 	exit(0);
 }
 void sync_execute(char* src, char* dst)
 {
 	struct stat statbuf1, statbuf2;
+	struct utimbuf time_buf;
 	struct dirent **src_list, **dst_list;
 	struct flock lock;
 	struct file_info *new_file;
@@ -142,9 +147,10 @@ void sync_execute(char* src, char* dst)
 	char sub_path[BUFFER_SIZE];
 	char* ptr;
 	char backup;
-	int i, j, fd;
+	int i, j, fd, fd2, length;
 	int src_count, dst_count;
 	int jump_next = 0;
+	pid_t pid;
 
 	//dst폴더 하위 모든 파일의 read권한 확인
 	sub_file_permission(dst);
@@ -152,16 +158,20 @@ void sync_execute(char* src, char* dst)
 	getcwd(sub_path,BUFFER_SIZE);
 	chdir(dst);
 	//백업파일 생성
-	sprintf(buf,"tar -cf backup_2484.tar *");
-	system(buf);
+	if((pid = fork()) < 0){
+		fprintf(stderr,"fork() error in sync_execute\n");
+		exit(1);
+	}
+	else if(pid == 0)
+		execlp("tar","tar","-cf","backup_2484.tar","*",(char*)0);
+	//명령 수행대기
+	while(wait((int*)0) != -1);
 	//백업파일 이동
-
-	if(strstr(sub_path, " ") == NULL)
-		sprintf(buf,"mv backup_2484.tar %s", sub_path);
-	//경로에 빈칸이 있으면
-	else
-		sprintf(buf,"mv backup_2484.tar \"%s\"", sub_path);
-	system(buf);
+	sprintf(buf,"%s/backup_2484.tar",sub_path);
+	if(rename("backup_2484.tar", buf) < 0){
+		fprintf(stderr,"rename() error in sync_execute\n");
+		exit(1);
+	}
 	chdir(sub_path);
 
 	//src가 파일이면
@@ -186,17 +196,30 @@ void sync_execute(char* src, char* dst)
 				//src 경로의 파일 src.tar로 압축하여 가지고옴
 				getcwd(sub_path,BUFFER_SIZE);
 				chdir(src);
-				sprintf(buf,"tar -cf src.tar \"%s\"",fname);
-				system(buf);
-				sprintf(buf,"mv src.tar \"%s\"", sub_path);
-				system(buf);
+				if((pid = fork()) < 0){
+					fprintf(stderr,"fork() error in sync_execute\n");
+					exit(1);
+				}
+				else if(pid == 0)
+					execlp("tar","tar","-cf","src.tar",fname,(char*)0);
+				while(wait((int*)0) != -1);
+				sprintf(buf,"%s/src.tar",sub_path);
+				if(rename("src.tar", buf) < 0){
+					fprintf(stderr,"rename() error in sync_execute\n");
+					exit(1);
+				}
 				chdir(sub_path);
 				*ptr = backup;
 			}
 			//현재 디렉토리 내부 파일일 경우
 			else{
-				sprintf(buf,"tar -cf src.tar \"%s\"",fname);
-				system(buf);
+				if((pid = fork()) < 0){
+					fprintf(stderr,"fork() error in sync_execute\n");
+					exit(1);
+				}
+				else if(pid == 0)
+					execlp("tar","tar","-cf","src.tar",fname,(char*)0);
+				while(wait((int*)0) != -1);
 			}
 			execute_tOption(dst);
 			return;
@@ -224,12 +247,11 @@ void sync_execute(char* src, char* dst)
 				//소스파일 이름과 목적디렉토리의 서브디렉토리 이름이 같을때
 				if(S_ISDIR(statbuf2.st_mode)){
 					//경로에 빈칸이 있는지 점검
-					if(strstr(dst," ") == NULL && strstr(old_list[i]->d_name," ") == NULL)
-						sprintf(buf,"rm -r %s/%s",dst, old_list[i]->d_name);
-					else
-						sprintf(buf,"rm -r \"%s/%s\"",dst, old_list[i]->d_name);
-					//해당 디렉토리 제거
-					system(buf);
+					sprintf(buf,"%s/%s",dst, old_list[i]->d_name);
+					if(rmdirs(buf, 0) < 0){
+						fprintf(stderr,"rmdirs() error in execute_sync\n");
+						exit(1);
+					}
 					continue;
 				}
 				//size, 수정시간이 같으면
@@ -253,11 +275,21 @@ void sync_execute(char* src, char* dst)
 					delete_head = new_file;
 				}
 				//해당 파일 제거
-				if(strstr(dst," ") == NULL && strstr(old_list[i]->d_name, " ") == NULL)
-					sprintf(buf,"rm -r %s/%s",dst, old_list[i]->d_name);
-				else
-					sprintf(buf,"rm -r \"%s/%s\"",dst, old_list[i]->d_name);
-				system(buf);
+				sprintf(buf,"%s/%s", dst, old_list[i]->d_name);
+				//디렉토리의 경우
+				if(S_ISDIR(statbuf2.st_mode)){
+					if(rmdirs(buf, 0) < 0){
+						fprintf(stderr,"rmdirs() error in execute_sync\n");
+						exit(1);
+					}
+				}
+				//파일일 경우
+				else{
+					if(remove(buf) < 0){
+						fprintf(stderr,"remove() error in execute_sync\n");
+						exit(1);
+					}
+				}
 			}
 
 		}
@@ -273,13 +305,25 @@ void sync_execute(char* src, char* dst)
 				new_file->next = create_head;
 			create_head = new_file;
 			}
-			//경로에 공백검사
-			if(strstr(src," ") == NULL && strstr(dst," ") == NULL && strstr(fname, " ") == NULL)
-				sprintf(buf,"cp -rp %s %s/%s", src,dst,fname);
-			else
-				sprintf(buf,"cp -rp \"%s\" \"%s/%s\"", src,dst,fname);
-			//파일 복사
-			system(buf);
+
+			//dst에 파일생성
+			sprintf(buf,"%s/%s", dst, fname);
+			if((fd2 = open(buf, O_RDWR|O_CREAT|O_TRUNC, statbuf1.st_mode &(S_IRWXU|S_IRWXG|S_IRWXO))) < 0){
+				fprintf(stderr,"copy-file creat fail\n");
+				exit(1);
+			}
+			//파일 내용복사
+			while((length = read(fd, buf, BUFFER_SIZE)) > 0)
+				write(fd2, buf, length);
+			close(fd2);
+			time_buf.actime = statbuf1.st_atime;
+			time_buf.modtime = statbuf1.st_mtime;
+			sprintf(buf,"%s/%s", dst, fname);
+			//수정시간 복사
+			if(utime(buf, &time_buf) < 0){
+				fprintf(stderr,"utime() error in execute_sync\n");
+				exit(1);
+			}
 		}
 		//=========unlock==========
 		lock.l_type = F_UNLCK;
@@ -677,6 +721,9 @@ void catch_signal(int signo)
 	//로그파일 롤백
 	rename("ssu_rsync_log_temp", "ssu_rsync_log");
 	exit(0);
+}
+int rmdirs(char* pathname, int mode){
+	return 0;
 }
 void usage()
 {
