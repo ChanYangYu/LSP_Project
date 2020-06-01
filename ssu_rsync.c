@@ -27,6 +27,7 @@ struct file_info* delete_head = NULL;
 
 struct dirent** old_list;
 char dst_path[BUFFER_SIZE];
+char src_path[BUFFER_SIZE];
 long tar_size;
 int count;
 int is_rOption = 0;
@@ -37,10 +38,10 @@ int is_file = 0;
 void catch_signal(int signo);
 void record_log(int argc, char* argv[]);
 void sync_execute(char* src, char* dst);
-int rmdirs(char *pathname, int mode);
 void execute_rOption(char* src, char* dst, char* src_dir);
 void execute_tOption(char* dst);
 void sub_file_permission(char* dir_path);
+int rmdirs(char *pathname);
 void usage(void);
 
 int main(int argc, char* argv[])
@@ -115,14 +116,14 @@ int main(int argc, char* argv[])
 		usage();
 		exit(1);
 	}
-	//dst경로 전역변수로 저장
+	//경로 전역변수로 저장(signal 핸들러에서 사용)
+	memset(src_path, 0, BUFFER_SIZE);
 	memset(dst_path, 0, BUFFER_SIZE);
 	strcpy(dst_path, argv[i+1]);
 	if((count = scandir(argv[i+1], &old_list, NULL, alphasort)) < 0){
 		fprintf(stderr,"scandir error in main()\n");
 		exit(1);
 	}
-
 	//sync수행
 	sync_execute(argv[i], argv[i+1]);
 	//log 기록
@@ -131,6 +132,7 @@ int main(int argc, char* argv[])
 	for(i = 0; i < count; i++)
 		free(old_list[i]);
 	free(old_list);
+	//임시파일들 모두 삭제
 	remove("ssu_rsync_log_temp");
 	remove("backup_2484.tar");
 	exit(0);
@@ -154,26 +156,15 @@ void sync_execute(char* src, char* dst)
 
 	//dst폴더 하위 모든 파일의 read권한 확인
 	sub_file_permission(dst);
-	//dst폴더로 이동
-	getcwd(sub_path,BUFFER_SIZE);
-	chdir(dst);
 	//백업파일 생성
 	if((pid = fork()) < 0){
 		fprintf(stderr,"fork() error in sync_execute\n");
 		exit(1);
 	}
 	else if(pid == 0)
-		execlp("tar","tar","-cf","backup_2484.tar","*",(char*)0);
+		execlp("tar","tar","-cf","backup_2484.tar","-C",dst,".",(char*)0);
 	//명령 수행대기
 	while(wait((int*)0) != -1);
-	//백업파일 이동
-	sprintf(buf,"%s/backup_2484.tar",sub_path);
-	if(rename("backup_2484.tar", buf) < 0){
-		fprintf(stderr,"rename() error in sync_execute\n");
-		exit(1);
-	}
-	chdir(sub_path);
-
 	//src가 파일이면
 	if(is_file){
 		//이름저장
@@ -195,13 +186,16 @@ void sync_execute(char* src, char* dst)
 				*ptr = '\0';
 				//src 경로의 파일 src.tar로 압축하여 가지고옴
 				getcwd(sub_path,BUFFER_SIZE);
+				strcpy(src_path, src);
 				chdir(src);
 				if((pid = fork()) < 0){
 					fprintf(stderr,"fork() error in sync_execute\n");
 					exit(1);
 				}
-				else if(pid == 0)
-					execlp("tar","tar","-cf","src.tar",fname,(char*)0);
+				else if(pid == 0){
+					sprintf(buf,"./%s",fname);
+					execlp("tar","tar","-cf","src.tar",buf,(char*)0);
+				}
 				while(wait((int*)0) != -1);
 				sprintf(buf,"%s/src.tar",sub_path);
 				if(rename("src.tar", buf) < 0){
@@ -213,12 +207,15 @@ void sync_execute(char* src, char* dst)
 			}
 			//현재 디렉토리 내부 파일일 경우
 			else{
+				strcpy(src_path, "./");
 				if((pid = fork()) < 0){
 					fprintf(stderr,"fork() error in sync_execute\n");
 					exit(1);
 				}
-				else if(pid == 0)
-					execlp("tar","tar","-cf","src.tar",fname,(char*)0);
+				else if(pid == 0){
+					sprintf(buf,"./%s",fname);
+					execlp("tar","tar","-cf","src.tar",buf,(char*)0);
+				}
 				while(wait((int*)0) != -1);
 			}
 			execute_tOption(dst);
@@ -248,7 +245,7 @@ void sync_execute(char* src, char* dst)
 				if(S_ISDIR(statbuf2.st_mode)){
 					//경로에 빈칸이 있는지 점검
 					sprintf(buf,"%s/%s",dst, old_list[i]->d_name);
-					if(rmdirs(buf, 0) < 0){
+					if(rmdirs(buf) < 0){
 						fprintf(stderr,"rmdirs() error in execute_sync\n");
 						exit(1);
 					}
@@ -278,7 +275,7 @@ void sync_execute(char* src, char* dst)
 				sprintf(buf,"%s/%s", dst, old_list[i]->d_name);
 				//디렉토리의 경우
 				if(S_ISDIR(statbuf2.st_mode)){
-					if(rmdirs(buf, 0) < 0){
+					if(rmdirs(buf) < 0){
 						fprintf(stderr,"rmdirs() error in execute_sync\n");
 						exit(1);
 					}
@@ -339,12 +336,14 @@ void sync_execute(char* src, char* dst)
 			exit(1);
 		}
 		if(is_tOption){
-			getcwd(sub_path,BUFFER_SIZE);
-			chdir(src);
-			system("tar -cf src.tar *");
-			sprintf(buf,"mv src.tar \"%s\"", sub_path);
-			system(buf);
-			chdir(sub_path);
+			//tar명령 실행
+			if((pid = fork()) < 0){
+				fprintf(stderr,"fork() error in sync_execute\n");
+				exit(1);
+			}
+			else if(pid == 0)
+				execlp("tar","tar","-cf","src.tar","-C",src,".",(char*)0);
+			while(wait((int*)0) != -1);
 			execute_tOption(dst);
 			return;
 		}
@@ -398,12 +397,11 @@ void sync_execute(char* src, char* dst)
 						//소스파일 이름과 목적디렉토리의 서브디렉토리 이름이 같을때
 						if(S_ISDIR(statbuf2.st_mode)){
 							//해당 디렉토리 제거
-							if(strstr(dst," ") == NULL && strstr(old_list[j]->d_name," ") == NULL)
-								sprintf(buf,"rm -r %s/%s",dst, old_list[j]->d_name);
-							else
-								sprintf(buf,"rm -r \"%s/%s\"",dst, old_list[j]->d_name);
-							system(buf);
-							//디렉토리의 경우 m옵션을 밑에서 한번에 처리하므로 break
+							sprintf(buf,"%s/%s",dst, old_list[j]->d_name);
+							if(rmdirs(buf) < 0){
+								fprintf(stderr,"rmdirs() error in execute_rsync\n");
+								exit(1);
+							}
 						}
 						//size, 수정시간이 같으면
 						if(statbuf1.st_size == statbuf2.st_size && statbuf1.st_mtime == statbuf2.st_mtime){
@@ -430,12 +428,23 @@ void sync_execute(char* src, char* dst)
 					new_file->next = create_head;
 					create_head = new_file;
 				}
-				if(strstr(src," ") == NULL && strstr(dst," ") == NULL && strstr(src_list[i]->d_name," ") == NULL)
-					sprintf(buf,"cp -rp %s/%s %s/%s", src,src_list[i]->d_name,dst,src_list[i]->d_name);
-				else
-					sprintf(buf,"cp -rp \"%s/%s\" \"%s/%s\"", src,src_list[i]->d_name,dst,src_list[i]->d_name);
-				//파일 복사
-				system(buf);
+				sprintf(buf,"%s/%s", dst, src_list[i]->d_name);
+				if((fd2 = open(buf, O_RDWR|O_CREAT|O_TRUNC, statbuf1.st_mode &(S_IRWXU|S_IRWXG|S_IRWXO))) < 0){
+					fprintf(stderr,"copy-file creat fail\n");
+					exit(1);
+				}
+				//파일 내용복사
+				while((length = read(fd, buf, BUFFER_SIZE)) > 0)
+					write(fd2, buf, length);
+				close(fd2);
+				time_buf.actime = statbuf1.st_atime;
+				time_buf.modtime = statbuf1.st_mtime;
+				sprintf(buf,"%s/%s", dst, src_list[i]->d_name);
+				//수정시간 복사
+				if(utime(buf, &time_buf) < 0){
+					fprintf(stderr,"utime() error in execute_sync\n");
+					exit(1);
+				}
 				//=========unlock==========
 				lock.l_type = F_UNLCK;
 				fcntl(fd, F_SETLK, &lock);
@@ -466,12 +475,15 @@ void sync_execute(char* src, char* dst)
 								new_file->next = delete_head;
 								delete_head = new_file;
 							}
-							//해당 파일 제거
-							if(strstr(dst," ") == NULL && strstr(dst_list[j]->d_name," ") == NULL)
-								sprintf(buf,"rm -r %s/%s",dst, dst_list[j]->d_name);
+							sprintf(buf,"%s/%s",dst, dst_list[j]->d_name);
+							if(stat(buf, &statbuf2) < 0){
+								fprintf(stderr,"stat() error in execute_rsync\n");
+								exit(1);
+							}
+							if(S_ISDIR(statbuf2.st_mode))
+								rmdirs(buf);
 							else
-								sprintf(buf,"rm -r \"%s/%s\"",dst, dst_list[j]->d_name);
-							system(buf);
+								remove(buf);
 						}
 					}
 				}
@@ -495,17 +507,26 @@ void record_log(int argc, char* argv[])
 	char* fname = "ssu_rsync_log";
 	char* ptr;
 	char buf[BUFFER_SIZE];
-	int i;
+	int i, fd, fd2, length;
 
 	if(access(fname, F_OK) != 0)
-		fp = fopen(fname, "w+");
-	else{
-		if((fp = fopen(fname, "a+")) == NULL){
-			fprintf(stderr, "fopen error in record_log()\n");
-			exit(1);
-		}
+		fd = open(fname, O_RDWR|O_CREAT, 0666);
+	else
+		fd = open(fname, O_RDWR);
+	if((fd2 = open("ssu_rsync_log_temp", O_RDWR|O_CREAT|O_TRUNC, 0666)) < 0){
+		fprintf(stderr,"copy-file creat fail\n");
+		exit(1);
 	}
-	system("cp ssu_rsync_log ssu_rsync_log_temp");
+	//파일 내용복사
+	while((length = read(fd, buf, BUFFER_SIZE)) > 0)
+		write(fd2, buf, length);
+	close(fd2);
+	close(fd);
+	//파일 재오픈
+	if((fp = fopen(fname, "a+")) == NULL){
+		fprintf(stderr, "fopen error in record_log()\n");
+		exit(1);
+	}
 	time(&t);
 	ptr = ctime(&t);
 	//개행 제거
@@ -524,11 +545,13 @@ void record_log(int argc, char* argv[])
 		while(!feof(fp2)){
 			memset(buf,0,BUFFER_SIZE);
 			fgets(buf,BUFFER_SIZE,fp2);
-			if(strlen(buf) != 0)
-				fprintf(fp,"\t%s",buf);
+			// ./를 지우기위해 2칸 점프
+			ptr = buf+2;
+			if(strlen(ptr) != 0)
+				fprintf(fp,"\t%s",ptr);
 		}
 		fclose(fp2);
-		system("rm -r tar_log.txt");
+		remove("tar_log.txt");
 	}
 	else{
 		cur = create_head;
@@ -549,20 +572,18 @@ void execute_rOption(char* src, char* dst, char* src_dir)
 	struct dirent** f_list;
 	struct stat statbuf1, statbuf2;
 	struct file_info* new_file;
+	struct flock lock;
+	struct utimbuf time_buf;
 	char buf[BUFFER_SIZE];
 	char* ptr;
 	int i,count;
+	int fd, fd2;
+	int length;
 
 	sprintf(buf,"%s/%s",dst,src_dir);
 	//dst에 서브디렉토리가 없으면 생성
-	if(access(buf, F_OK) != 0){
-		//경로에 공백있는지 검사
-		if(strstr(dst," ") == NULL && strstr(src_dir," ") == NULL)
-			sprintf(buf,"mkdir %s/%s", dst, src_dir);
-		else
-			sprintf(buf,"mkdir \"%s/%s\"", dst, src_dir);
-		system(buf);
-	}
+	if(access(buf, F_OK) != 0)
+		mkdir(buf,0777);
 	//서브디렉토리 주소 buf에 저장
 	sprintf(buf,"%s/%s",src,src_dir);
 	//서브디렉토리 스캔
@@ -609,13 +630,24 @@ void execute_rOption(char* src, char* dst, char* src_dir)
 			}
 			else{
 				//중복되는 디렉토리 삭제
-				if(strstr(dst, " ") == NULL && strstr(src_dir," ") == NULL && strstr(f_list[i]->d_name," ") == NULL)
-					sprintf(buf,"rm -r %s/%s%s", dst, src_dir, f_list[i]->d_name);
-				else
-					sprintf(buf,"rm -r \"%s/%s%s\"", dst, src_dir, f_list[i]->d_name);
-				system(buf);
+				if(rmdirs(buf) < 0){
+					fprintf(stderr,"rmdirs() error in execute_rOption\n");
+					exit(1);
+				}
 			}
 		}
+		sprintf(buf,"%s/%s%s",src,src_dir,f_list[i]->d_name);
+		//========lock=========
+		if((fd = open(buf, O_RDONLY)) < 0){
+			fprintf(stderr,"open error in execute_sync()\n");
+			exit(1);
+		}
+		lock.l_type = F_WRLCK;
+		lock.l_start = 0;
+		lock.l_whence = SEEK_SET;
+		lock.l_len = 0;
+		fcntl(fd, F_SETLK, &lock);
+		//=====================
 		//파일이면 create파일 리스트에 추가
 		new_file = (struct file_info*)malloc(sizeof(struct file_info));
 		strcpy(ptr, f_list[i]->d_name);
@@ -630,14 +662,27 @@ void execute_rOption(char* src, char* dst, char* src_dir)
 			create_head = new_file;
 		}
 		//파일 동기화
-
-		//모든 경로에 공백이 없으면
-		if(strstr(src_dir," ") == NULL && strstr(src," ") == NULL && strstr(dst, " ") == NULL)
-			sprintf(buf, "cp -rp %s/%s %s/%s",src,src_dir, dst,src_dir);
-		//그외에 경우
-		else
-			sprintf(buf, "cp -rp \"%s/%s\" \"%s/%s\"",src,src_dir, dst,src_dir);
-		system(buf);
+		sprintf(buf,"%s/%s%s",dst,src_dir,f_list[i]->d_name);
+		if((fd2 = open(buf, O_RDWR|O_CREAT|O_TRUNC, statbuf1.st_mode &(S_IRWXU|S_IRWXG|S_IRWXO))) < 0){
+			fprintf(stderr,"copy-file creat fail\n");
+			exit(1);
+		}
+		//파일 내용복사
+		while((length = read(fd, buf, BUFFER_SIZE)) > 0)
+			write(fd2, buf, length);
+		close(fd2);
+		time_buf.actime = statbuf1.st_atime;
+		time_buf.modtime = statbuf1.st_mtime;
+		sprintf(buf,"%s/%s%s",dst,src_dir,f_list[i]->d_name);
+		//수정시간 복사
+		if(utime(buf, &time_buf) < 0){
+			fprintf(stderr,"utime() error in execute_sync\n");
+			exit(1);
+		}
+		//=========unlock==========
+		lock.l_type = F_UNLCK;
+		fcntl(fd, F_SETLK, &lock);
+		close(fd);
 		//ptr다시 널문자로 만듬
 		*ptr = '\0';
 	}
@@ -681,48 +726,103 @@ void sub_file_permission(char* dir_path)
 void execute_tOption(char* dst)
 {
 	struct stat statbuf;
-	char buf[BUFFER_SIZE];
+	int fd;
+	pid_t pid;
 
 	stat("src.tar",&statbuf);
 	tar_size = statbuf.st_size;
 
-	sprintf(buf,"tar -xvf src.tar -C \"%s\" >tar_log.txt", dst);
-	system(buf);
+	fd = open("tar_log.txt",O_RDWR|O_CREAT|O_TRUNC, 0666);
+	if((pid = fork()) < 0){
+		fprintf(stderr,"fork() error in execute_tOption()\n");
+		exit(1);
+	}
+	else if(pid == 0){
+		dup2(fd, 1);
+		execlp("tar", "tar", "-xvf", "src.tar", "-C", dst,(char*)0);
+	}
+	while(wait((int*)0) != -1);
 	//tar파일 삭제
-	sprintf(buf,"rm -r src.tar");
-	system(buf);
+	remove("src.tar");
 }
 
 void catch_signal(int signo)
 {
 	char buf[BUFFER_SIZE];
+	pid_t pid;
 	
 	//동기화중이던 dst디렉토리 삭제
-
-	if(strstr(dst_path," ") == NULL)
-		sprintf(buf,"rm -r %s", dst_path);
-	else
-		sprintf(buf,"rm -r \"%s\"", dst_path);
-	system(buf);
+	if(rmdirs(dst_path) < 0){
+		fprintf(stderr,"rmdirs() error in catch_signal\n");
+		exit(1);
+	}
 	//dst디렉토리 생성
-	if(strstr(dst_path," ") == NULL)
-		sprintf(buf,"mkdir %s", dst_path);
-	else
-		sprintf(buf,"mkdir \"%s\"", dst_path);
-	system(buf);
+	mkdir(dst_path, 0777);
 	//backup.tar 해당폴더 압축해제
-	if(strstr(dst_path," ") == NULL)
-		sprintf(buf,"tar -xf backup_2484.tar -C %s", dst_path);
-	else
-		sprintf(buf,"tar -xf backup_2484.tar -C \"%s\"", dst_path);
-	system(buf);
+	if((pid = fork()) < 0){
+		fprintf(stderr,"fork() error in execute_tOption()\n");
+		exit(1);
+	}
+	else if(pid == 0)
+		execlp("tar", "tar", "-xf", "backup_2484.tar", "-C", dst_path,(char*)0);
+	while(wait((int*)0) != -1);
 	//backup.tar 파일삭제
-	system("rm -r backup_2484.tar");
+	remove("backup_2484.tar");
+	//파일 t옵션시 src디렉토리에 남아있는 경우
+	sprintf(buf,"%ssrc.tar",src_path);
+	//src.tar남아있는 경우 삭제
+	if(access(buf,F_OK) == 0)
+		remove(buf);
+	//그 외에는 작업디렉토리에 있으므로 삭제
+	else
+		remove("src.tar");
+	//tar_log.txt파일 삭제
+	remove("tar_log.txt");
 	//로그파일 롤백
 	rename("ssu_rsync_log_temp", "ssu_rsync_log");
 	exit(0);
 }
-int rmdirs(char* pathname, int mode){
+int rmdirs(char* pathname){
+	struct stat statbuf;
+	struct dirent ** f_list;
+	int count, i;
+	char* ptr;
+
+	//scan
+	if((count = scandir(pathname, &f_list, NULL, alphasort)) < 0){
+		fprintf(stderr,"scandir() error in rmdirs\n");
+		exit(1);
+	}
+	//빈디렉토리 일 경우
+	if(count == 2){
+		remove(pathname);
+		return 0;
+	}
+	ptr = pathname + strlen(pathname);
+	*ptr++ = '/';
+	*ptr = '\0';
+	for(i = 0; i < count; i++){
+		if(!strcmp(f_list[i]->d_name,".") || !strcmp(f_list[i]->d_name, ".."))
+			continue;
+		//경로 새로지정
+		strcat(pathname, f_list[i]->d_name);
+		if(stat(pathname, &statbuf) < 0){
+			fprintf(stderr, "stat() error in rmdirs\n");
+			exit(1);
+		}
+		//디렉토리이면 재귀로 탐색하면서 삭제
+		if(S_ISDIR(statbuf.st_mode))
+			rmdirs(pathname);
+		//삭제
+		remove(pathname);
+		*ptr = '\0';
+	}
+	//빈 디렉토리 삭제
+	remove(pathname);
+	//메모리 회수
+	for(i = 0; i < count; i++)
+		free(f_list[i]);
+	free(f_list);
 	return 0;
 }
 void usage()
