@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <sys/wait.h>
+#include <sys/time.h>
 #include <sys/stat.h>
 #include <time.h>
 #define BUFFER_SIZE 1024
@@ -13,10 +14,12 @@ int command_num = 0;
 void execute_add(FILE* fp, char* cmd);
 int check_run_cycle(char* cmd, int index);
 void execute_remove(FILE* fp, char* cmd);
+void runtime(struct timeval *begin, struct timeval *end);
 
 //ssu_crontab
 int main(void)
 {
+	struct timeval begin, end;
 	FILE* fp;
 	char buf[BUFFER_SIZE];
 	char cmd_name[10];
@@ -38,6 +41,7 @@ int main(void)
 			exit(1);
 		}
 	}
+	gettimeofday(&begin, NULL);
 	while(!feof(fp)){
 		//파일내용 출력
 		memset(buf,0,BUFFER_SIZE);
@@ -78,6 +82,8 @@ int main(void)
 		else
 			printf("Error 1 : 없는 명령어입니다.\n");
 	}
+	gettimeofday(&end, NULL);
+	runtime(&begin, &end);
 	exit(0);
 }
 
@@ -444,3 +450,15 @@ void execute_remove(FILE* fp, char* cmd)
 	fprintf(log, "[%s] remove %s",ptr, ptr2);
 	fclose(log);
 }
+void runtime(struct timeval *begin, struct timeval *end)
+{
+	end->tv_sec -= begin->tv_sec;
+
+	if(end->tv_usec < begin->tv_usec){
+		end->tv_sec--;
+		end->tv_usec += 1000000;
+	}
+	end->tv_usec -= begin->tv_usec;
+	printf("Runtime: %ld:%06ld(sec:usec)\n", end->tv_sec, end->tv_usec);
+}
+

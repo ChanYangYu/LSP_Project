@@ -41,14 +41,17 @@ int main(void)
 			sleep(1);
 			continue;
 		}
+		//시간측정
+		time(&t);
+		tmbuf = localtime(&t);
+		//0초가 아니면 continue
+		if(tmbuf->tm_sec != 0)
+			continue;
 		//파일오픈
 		if((file = fopen("ssu_crontab_file","r+")) == NULL){
 			fprintf(stderr,"ssu_crond fopen error\n");
 			exit(1);
 		}
-		//시간측정
-		time(&t);
-		tmbuf = localtime(&t);
 		while(!feof(file)){
 			memset(buf,0,BUFFER_SIZE);
 			memset(cmd,0,BUFFER_SIZE);

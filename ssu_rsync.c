@@ -42,11 +42,13 @@ void execute_rOption(char* src, char* dst, char* src_dir);
 void execute_tOption(char* dst);
 void sub_file_permission(char* dir_path);
 int rmdirs(char *pathname);
+void runtime(struct timeval *begin, struct timeval *end);
 void usage(void);
 
 int main(int argc, char* argv[])
 {
 	struct sigaction sigact;
+	struct timeval begin, end;
 	struct stat statbuf;
 	int i = 1;
 
@@ -124,6 +126,7 @@ int main(int argc, char* argv[])
 		fprintf(stderr,"scandir error in main()\n");
 		exit(1);
 	}
+	gettimeofday(&begin, NULL);
 	//sync수행
 	sync_execute(argv[i], argv[i+1]);
 	//log 기록
@@ -135,6 +138,8 @@ int main(int argc, char* argv[])
 	//임시파일들 모두 삭제
 	remove("ssu_rsync_log_temp");
 	remove("backup_2484.tar");
+    	gettimeofday(&end, NULL);
+    	runtime(&begin, &end);
 	exit(0);
 }
 void sync_execute(char* src, char* dst)
@@ -547,7 +552,7 @@ void record_log(int argc, char* argv[])
 			fgets(buf,BUFFER_SIZE,fp2);
 			// ./를 지우기위해 2칸 점프
 			ptr = buf+2;
-			if(strlen(ptr) != 0)
+			if(strlen(ptr) != 0 && *ptr != '\n')
 				fprintf(fp,"\t%s",ptr);
 		}
 		fclose(fp2);
@@ -617,7 +622,7 @@ void execute_rOption(char* src, char* dst, char* src_dir)
 			*ptr = '\0';
 			continue;
 		}
-		//dst디렉토리에 해당하는파일이 존재하는지 판단
+		//dst디 && *ptr != '\n'렉토리에 해당하는파일이 존재하는지 판단
 		sprintf(buf, "%s/%s%s",dst,src_dir,f_list[i]->d_name);
 		if(access(buf, F_OK) == 0){
 			stat(buf, &statbuf2);
@@ -661,8 +666,8 @@ void execute_rOption(char* src, char* dst, char* src_dir)
 			new_file->next = create_head;
 			create_head = new_file;
 		}
-		//파일 동기화
-		sprintf(buf,"%s/%s%s",dst,src_dir,f_list[i]->d_name);
+		//파일 동기화(src_dir에는 파일이름이 붙어있음)
+		sprintf(buf,"%s/%s",dst,src_dir);
 		if((fd2 = open(buf, O_RDWR|O_CREAT|O_TRUNC, statbuf1.st_mode &(S_IRWXU|S_IRWXG|S_IRWXO))) < 0){
 			fprintf(stderr,"copy-file creat fail\n");
 			exit(1);
@@ -673,7 +678,8 @@ void execute_rOption(char* src, char* dst, char* src_dir)
 		close(fd2);
 		time_buf.actime = statbuf1.st_atime;
 		time_buf.modtime = statbuf1.st_mtime;
-		sprintf(buf,"%s/%s%s",dst,src_dir,f_list[i]->d_name);
+		//src_dir에 ptr로 파일이름이 들어감
+		sprintf(buf,"%s/%s",dst,src_dir);
 		//수정시간 복사
 		if(utime(buf, &time_buf) < 0){
 			fprintf(stderr,"utime() error in execute_sync\n");
@@ -824,6 +830,17 @@ int rmdirs(char* pathname){
 		free(f_list[i]);
 	free(f_list);
 	return 0;
+}
+void runtime(struct timeval *begin, struct timeval *end)
+{
+	end->tv_sec -= begin->tv_sec;
+
+	if(end->tv_usec < begin->tv_usec){
+		end->tv_sec--;
+		end->tv_usec += 1000000;
+	}
+	end->tv_usec -= begin->tv_usec;
+	printf("Runtime: %ld:%06ld(sec:usec)\n", end->tv_sec, end->tv_usec);
 }
 void usage()
 {

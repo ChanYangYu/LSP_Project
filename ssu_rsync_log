@@ -1,118 +1,425 @@
-[Mon Jun  1 15:05:18 2020] ./a.out -m src dst 
+[Fri Jun  5 00:18:15 2020] ./ssu_rsync -r /home/goodtss/B17 dst 
+	스크린샷, 2020-05-15 19-42-20.png 40076bytes
+	스크린샷, 2020-05-15 19-34-08.png 42209bytes
+	스크린샷, 2020-05-15 19-17-41.png 42954bytes
+	스크린샷, 2020-05-15 19-17-39.png 2991350bytes
+	스크린샷, 2020-05-15 19-10-50.png 46699bytes
+	스크린샷, 2020-05-15 19-05-14.png 62747bytes
+	스크린샷, 2020-05-15 18-54-02.png 68019bytes
+	스크린샷, 2020-05-15 18-38-09.png 39981bytes
+	소스코드/ssu_pthread_self.c 842bytes
+	소스코드/ssu_pthread_join.c 934bytes
+	소스코드/ssu_pthread_exit_2.c 700bytes
+	소스코드/ssu_pthread_exit_1.c 768bytes
+	소스코드/ssu_pthread_equal.c 754bytes
+	소스코드/ssu_pthread_create_2.c 1587bytes
+	소스코드/ssu_pthread_create_1.c 817bytes
+[Fri Jun  5 00:18:28 2020] ./ssu_rsync -m main.c dst 
+	스크린샷, 2020-05-15 19-42-20.png delete
+	스크린샷, 2020-05-15 19-34-08.png delete
+	스크린샷, 2020-05-15 19-17-41.png delete
+	스크린샷, 2020-05-15 19-17-39.png delete
+	스크린샷, 2020-05-15 19-10-50.png delete
+	스크린샷, 2020-05-15 19-05-14.png delete
+	스크린샷, 2020-05-15 18-54-02.png delete
+	스크린샷, 2020-05-15 18-38-09.png delete
+	소스코드 delete
+	보고서 delete
+[Fri Jun  5 00:18:31 2020] ./ssu_rsync -r /home/goodtss/lsp dst 
+	스크린샷, 2020-05-25 16-32-57.png 1478398bytes
+	version5.c 1279bytes
+	version4.c 1288bytes
+	version3.c 1175bytes
+	tartest.c 231bytes
+	result.zip 2854bytes
+	result.txt 101bytes
+	record 512bytes
+	person.h 363bytes
+	makefile 179bytes
+	main.c 1353bytes
+	foreground.c 16290bytes
+	backup.c 5319bytes
+	background.c 2991bytes
+	a.out 8432bytes
+	A20162484/9-1.txt 27bytes
+	A20162484/8-5.txt 24bytes
+	A20162484/8-4.txt 25bytes
+	A20162484/8-3.txt 14bytes
+	A20162484/8-2.txt 15bytes
+	A20162484/8-1.txt 15bytes
+	A20162484/7-1.txt 26bytes
+	A20162484/6-4.txt 20bytes
+	A20162484/6-3.txt 32bytes
+	A20162484/6-2.txt 24bytes
+	A20162484/6-1.txt 14bytes
+	A20162484/5-4.txt 23bytes
+	A20162484/5-3.txt 9bytes
+	A20162484/5-2.txt 39bytes
+	A20162484/5-1.txt 23bytes
+	A20162484/4-4.txt 20bytes
+	A20162484/4-3.txt 20bytes
+	A20162484/4-2.txt 25bytes
+	A20162484/4-1.txt 27bytes
+	A20162484/3-5.txt 14bytes
+	A20162484/3-4.txt 29bytes
+	A20162484/3-3.txt 19bytes
+	A20162484/3-2.txt 15bytes
+	A20162484/3-1.txt 9bytes
+	A20162484/26.c 699bytes
+	A20162484/25.c 686bytes
+	A20162484/24.c 1116bytes
+	A20162484/23.c 1518bytes
+	A20162484/22.c 584bytes
+	A20162484/21.c 791bytes
+	A20162484/20.c 769bytes
+	A20162484/2-5.txt 18bytes
+	A20162484/2-4.txt 18bytes
+	A20162484/2-3.txt 18bytes
+	A20162484/2-2.txt 25bytes
+	A20162484/2-1.txt 19bytes
+	A20162484/19.c 639bytes
+	A20162484/18.c 904bytes
+	A20162484/17.c 833bytes
+	A20162484/16.c 1667bytes
+	A20162484/15.c 737bytes
+	A20162484/14.c 735bytes
+	A20162484/13.c 1128bytes
+	A20162484/12.c 963bytes
+	A20162484/11.c 809bytes
+	A20162484/10-2.txt 21bytes
+	A20162484/10-1.txt 20bytes
+	A20162484/1-5.txt 27bytes
+	A20162484/1-4.txt 23bytes
+	A20162484/1-3.txt 14bytes
+	A20162484/1-2.txt 19bytes
+	A20162484/1-1.txt 16bytes
+	20162484/trash/info/u 96bytes
+	20162484/trash/info/t 96bytes
+	20162484/trash/info/s 96bytes
+	20162484/trash/info/r 96bytes
+	20162484/trash/info/q 96bytes
+	20162484/trash/info/patch.txt 104bytes
+	20162484/trash/info/p 96bytes
+	20162484/trash/info/o 96bytes
+	20162484/trash/info/n 96bytes
+	20162484/trash/info/m 96bytes
+	20162484/trash/info/l 96bytes
+	20162484/trash/info/k 96bytes
+	20162484/trash/info/j 96bytes
+	20162484/trash/info/i 96bytes
+	20162484/trash/info/h 96bytes
+	20162484/trash/info/g 96bytes
+	20162484/trash/info/f 96bytes
+	20162484/trash/info/e 96bytes
+	20162484/trash/info/d 96bytes
+	20162484/trash/info/c 96bytes
+	20162484/trash/files/u 0bytes
+	20162484/trash/files/t 0bytes
+	20162484/trash/files/s 0bytes
+	20162484/trash/files/r 0bytes
+	20162484/trash/files/q 0bytes
+	20162484/trash/files/patch.txt 917bytes
+	20162484/trash/files/p 0bytes
+	20162484/trash/files/o 0bytes
+	20162484/trash/files/n 0bytes
+	20162484/trash/files/m 0bytes
+	20162484/trash/files/l 0bytes
+	20162484/trash/files/k 0bytes
+	20162484/trash/files/j 0bytes
+	20162484/trash/files/i 0bytes
+	20162484/trash/files/h 0bytes
+	20162484/trash/files/g 0bytes
+	20162484/trash/files/f 0bytes
+	20162484/trash/files/e 0bytes
+	20162484/trash/files/d 0bytes
+	20162484/trash/files/c 0bytes
+	20162484/ssu_mntr 31280bytes
+	20162484/patch.txt 1178bytes
+	20162484/makefile 179bytes
+	20162484/main.o 2984bytes
+	20162484/main.c 914bytes
+	20162484/log.txt 5734bytes
+	20162484/foreground.o 31104bytes
+	20162484/foreground.c 22110bytes
+	20162484/check/echomsg.txt 13bytes
+	20162484/background.exe 22184bytes
+	20162484/background.c 13199bytes
+	20162484/#P2_20162484_ver2.0.zip 9411bytes
+	20162484/#P2_20162484_ver2.0/스크린샷, 2020-05-11 11-27-15.png 15459bytes
+	20162484/#P2_20162484_ver2.0/스크린샷, 2020-05-11 11-26-49.png 25119bytes
+	20162484/#P2_20162484_ver2.0/스크린샷, 2020-05-11 11-13-55.png 27870bytes
+	20162484/#P2_20162484_ver2.0/스크린샷, 2020-05-11 02-04-06.png 21340bytes
+	20162484/#P2_20162484_ver2.0/스크린샷, 2020-05-11 02-03-06.png 22216bytes
+	20162484/#P2_20162484_ver2.0/trash/info/c_1 116bytes
+	20162484/#P2_20162484_ver2.0/trash/info/c 116bytes
+	20162484/#P2_20162484_ver2.0/trash/info/b 116bytes
+	20162484/#P2_20162484_ver2.0/trash/files/c_1 9bytes
+	20162484/#P2_20162484_ver2.0/trash/files/c 0bytes
+	20162484/#P2_20162484_ver2.0/trash/files/b 13bytes
+	20162484/#P2_20162484_ver2.0/ssu_mntr 31344bytes
+	20162484/#P2_20162484_ver2.0/makefile 179bytes
+	20162484/#P2_20162484_ver2.0/main.o 2984bytes
+	20162484/#P2_20162484_ver2.0/main.c 887bytes
+	20162484/#P2_20162484_ver2.0/log.txt 32bytes
+	20162484/#P2_20162484_ver2.0/foreground.o 32744bytes
+	20162484/#P2_20162484_ver2.0/foreground.c 23286bytes
+	20162484/#P2_20162484_ver2.0/check/a 28bytes
+	20162484/#P2_20162484_ver2.0/background.c 13211bytes
+	20162484/#P2_20162484_ver2.0/#P2_20162484_ver2.2.zip 9765bytes
+	20162484/#P2_20162484_ver1.9.zip 9283bytes
+	20162484/#P2_20162484_ver1.8.zip 9323bytes
+	20162484/#P2_20162484_ver1.8/ssu_mntr 31344bytes
+	20162484/#P2_20162484_ver1.8/makefile 179bytes
+	20162484/#P2_20162484_ver1.8/main.o 2984bytes
+	20162484/#P2_20162484_ver1.8/main.c 914bytes
+	20162484/#P2_20162484_ver1.8/log.txt 480bytes
+	20162484/#P2_20162484_ver1.8/foreground.o 31232bytes
+	20162484/#P2_20162484_ver1.8/foreground.c 22099bytes
+	20162484/#P2_20162484_ver1.8/check/a 0bytes
+	20162484/#P2_20162484_ver1.8/background.exe 22232bytes
+	20162484/#P2_20162484_ver1.8/background.c 13159bytes
+	20162484/#P2_20162484_ver1.7.zip 9192bytes
+	20162484/#P2_20162484_ver1.6.zip 9115bytes
+	20162484/#P2_20162484_ver1.5.zip 9327bytes
+	20162484/#P2_20162484_ver1.4.zip 8898bytes
+	20162484/#P2_20162484_ver1.3.zip 8688bytes
+	20162484/#P2_20162484_ver1.2.zip 7265bytes
+[Fri Jun  5 00:19:03 2020] ./ssu_rsync -m main.c dst 
+	main.c 1631bytes
 	스크린샷, 2020-05-25 16-32-57.png delete
 	version5.c delete
 	version4.c delete
 	version3.c delete
 	test delete
 	tartest.c delete
-	src.tar delete
 	result.zip delete
 	result.txt delete
 	record delete
 	person.h delete
 	makefile delete
-	main.c delete
 	foreground.c delete
 	backup.c delete
 	background.c delete
 	a.out delete
 	A20162484 delete
 	20162484 delete
-[Mon Jun  1 15:06:04 2020] ./a.out -r /home/goodtss/B19 dst 
-	스크린샷, 2020-05-23 18-03-00.png 65224bytes
-	스크린샷, 2020-05-23 17-46-56.png 50557bytes
-	스크린샷, 2020-05-23 17-19-37.png 31014bytes
-	스크린샷, 2020-05-23 15-40-20.png 40667bytes
-	스크린샷, 2020-05-23 15-18-09.png 52261bytes
-	스크린샷, 2020-05-23 15-01-40.png 38814bytes
-	스크린샷, 2020-05-22 16-20-51.png 30436bytes
-	스크린샷, 2020-05-22 16-12-45.png 74577bytes
-	스크린샷, 2020-05-22 16-03-16.png 24432bytes
-	스크린샷, 2020-05-22 16-03-00.png 25910bytes
-	스크린샷, 2020-05-22 15-40-24.png 64492bytes
-	스크린샷, 2020-05-22 15-38-52.png 51900bytes
-	스크린샷, 2020-05-22 15-14-45.png 30562bytes
-	스크린샷, 2020-05-22 14-39-54.png 30782bytes
-	스크린샷, 2020-05-22 14-34-55.png 49353bytes
-	소스코드/질문사항.txt 440bytes
-	소스코드/ssu_nonblock2.c 1857bytes
-	소스코드/ssu_nonblock1.c 1866bytes
-	소스코드/ssu_fddup.c 422bytes
-	소스코드/ssu_fdcopy.c 553bytes
-	소스코드/ssu_fcntl_lock4.c 2058bytes
-	소스코드/ssu_fcntl_lock3.c 1611bytes
-	소스코드/ssu_fcntl_lock2.c 784bytes
-	소스코드/ssu_fcntl_lock1.c 1242bytes
-	소스코드/ssu_fcntl_8.c 1465bytes
-	소스코드/ssu_fcntl_7.c 2199bytes
-	소스코드/ssu_closeonexec_3.c 399bytes
-	소스코드/ssu_close_on_exec.c 934bytes
-[Mon Jun  1 15:06:42 2020] ./a.out -m src dst 
-	스크린샷, 2020-05-23 18-03-00.png delete
-	스크린샷, 2020-05-23 17-46-56.png delete
-	스크린샷, 2020-05-23 17-19-37.png delete
-	스크린샷, 2020-05-23 15-40-20.png delete
-	스크린샷, 2020-05-23 15-18-09.png delete
-	스크린샷, 2020-05-23 15-01-40.png delete
-	스크린샷, 2020-05-22 16-20-51.png delete
-	스크린샷, 2020-05-22 16-12-45.png delete
-	스크린샷, 2020-05-22 16-03-16.png delete
-	스크린샷, 2020-05-22 16-03-00.png delete
-	스크린샷, 2020-05-22 15-40-24.png delete
-	스크린샷, 2020-05-22 15-38-52.png delete
-	스크린샷, 2020-05-22 15-14-45.png delete
-	스크린샷, 2020-05-22 14-39-54.png delete
-	스크린샷, 2020-05-22 14-34-55.png delete
-	소스코드 delete
-	보고서 delete
-[Mon Jun  1 15:06:59 2020] ./a.out -t /home/goodtss/B19 dst 
-	totalSize 706560bytes
-	
-	스크린샷, 2020-05-23 15-40-20.png
-	보고서/
-	스크린샷, 2020-05-22 14-39-54.png
-	스크린샷, 2020-05-22 15-38-52.png
-	스크린샷, 2020-05-23 15-18-09.png
-	스크린샷, 2020-05-23 17-19-37.png
-	스크린샷, 2020-05-22 14-34-55.png
-	스크린샷, 2020-05-22 16-03-00.png
-	스크린샷, 2020-05-22 15-14-45.png
-	스크린샷, 2020-05-22 16-03-16.png
-	소스코드/
-	소스코드/ssu_fddup.c
-	소스코드/ssu_closeonexec_3.c
-	소스코드/ssu_close_on_exec.c
-	소스코드/ssu_fdcopy.c
-	소스코드/질문사항.txt
-	소스코드/ssu_fcntl_lock1.c
-	소스코드/ssu_fcntl_8.c
-	소스코드/ssu_nonblock2.c
-	소스코드/ssu_fcntl_lock2.c
-	소스코드/ssu_fcntl_lock4.c
-	소스코드/ssu_fcntl_lock3.c
-	소스코드/ssu_fcntl_7.c
-	소스코드/ssu_nonblock1.c
-	스크린샷, 2020-05-23 18-03-00.png
-	스크린샷, 2020-05-22 16-20-51.png
-	스크린샷, 2020-05-22 16-12-45.png
-	스크린샷, 2020-05-23 15-01-40.png
-	스크린샷, 2020-05-22 15-40-24.png
-	스크린샷, 2020-05-23 17-46-56.png
-[Mon Jun  1 15:07:24 2020] ./a.out -m src dst 
-	스크린샷, 2020-05-23 18-03-00.png delete
-	스크린샷, 2020-05-23 17-46-56.png delete
-	스크린샷, 2020-05-23 17-19-37.png delete
-	스크린샷, 2020-05-23 15-40-20.png delete
-	스크린샷, 2020-05-23 15-18-09.png delete
-	스크린샷, 2020-05-23 15-01-40.png delete
-	스크린샷, 2020-05-22 16-20-51.png delete
-	스크린샷, 2020-05-22 16-12-45.png delete
-	스크린샷, 2020-05-22 16-03-16.png delete
-	스크린샷, 2020-05-22 16-03-00.png delete
-	스크린샷, 2020-05-22 15-40-24.png delete
-	스크린샷, 2020-05-22 15-38-52.png delete
-	스크린샷, 2020-05-22 15-14-45.png delete
-	스크린샷, 2020-05-22 14-39-54.png delete
-	스크린샷, 2020-05-22 14-34-55.png delete
-	소스코드 delete
-	보고서 delete
+[Fri Jun  5 00:19:11 2020] ./ssu_rsync -t /home/goodtss/lsp dst 
+	totalSize 2252800bytes
+	스크린샷, 2020-05-25 16-32-57.png
+	backup.c
+	record
+	version4.c
+	a.out
+	result.zip
+	tartest.c
+	makefile
+	background.c
+	person.h
+	version5.c
+	A20162484/
+	A20162484/6-4.txt
+	A20162484/8-3.txt
+	A20162484/3-5.txt
+	A20162484/22.c
+	A20162484/16.c
+	A20162484/20.c
+	A20162484/1-5.txt
+	A20162484/24.c
+	A20162484/25.c
+	A20162484/5-2.txt
+	A20162484/26.c
+	A20162484/1-4.txt
+	A20162484/6-1.txt
+	A20162484/1-2.txt
+	A20162484/6-2.txt
+	A20162484/5-3.txt
+	A20162484/2-3.txt
+	A20162484/3-3.txt
+	A20162484/6-3.txt
+	A20162484/21.c
+	A20162484/2-2.txt
+	A20162484/8-2.txt
+	A20162484/2-5.txt
+	A20162484/4-1.txt
+	A20162484/3-1.txt
+	A20162484/1-1.txt
+	A20162484/8-5.txt
+	A20162484/5-1.txt
+	A20162484/7-1.txt
+	A20162484/10-1.txt
+	A20162484/4-2.txt
+	A20162484/5-4.txt
+	A20162484/3-2.txt
+	A20162484/18.c
+	A20162484/10-2.txt
+	A20162484/1-3.txt
+	A20162484/2-4.txt
+	A20162484/17.c
+	A20162484/8-4.txt
+	A20162484/13.c
+	A20162484/8-1.txt
+	A20162484/12.c
+	A20162484/23.c
+	A20162484/2-1.txt
+	A20162484/19.c
+	A20162484/4-4.txt
+	A20162484/3-4.txt
+	A20162484/11.c
+	A20162484/9-1.txt
+	A20162484/14.c
+	A20162484/4-3.txt
+	A20162484/15.c
+	20162484/
+	20162484/#P2_20162484_ver1.9.zip
+	20162484/background.exe
+	20162484/#P2_20162484_ver1.2.zip
+	20162484/#P2_20162484_ver1.6.zip
+	20162484/#P2_20162484_ver1.4.zip
+	20162484/#P2_20162484_ver1.8.zip
+	20162484/makefile
+	20162484/#P2_20162484_ver1.8/
+	20162484/#P2_20162484_ver1.8/background.exe
+	20162484/#P2_20162484_ver1.8/makefile
+	20162484/#P2_20162484_ver1.8/main.o
+	20162484/#P2_20162484_ver1.8/log.txt
+	20162484/#P2_20162484_ver1.8/background.c
+	20162484/#P2_20162484_ver1.8/foreground.o
+	20162484/#P2_20162484_ver1.8/foreground.c
+	20162484/#P2_20162484_ver1.8/ssu_mntr
+	20162484/#P2_20162484_ver1.8/trash/
+	20162484/#P2_20162484_ver1.8/trash/files/
+	20162484/#P2_20162484_ver1.8/trash/info/
+	20162484/#P2_20162484_ver1.8/trash/info/hi~/
+	20162484/#P2_20162484_ver1.8/main.c
+	20162484/#P2_20162484_ver1.8/check/
+	20162484/#P2_20162484_ver1.8/check/a
+	20162484/main.o
+	20162484/log.txt
+	20162484/background.c
+	20162484/foreground.o
+	20162484/#P2_20162484_ver1.5.zip
+	20162484/foreground.c
+	20162484/ssu_mntr
+	20162484/#P2_20162484_ver1.3.zip
+	20162484/patch.txt
+	20162484/#P2_20162484_ver2.0/
+	20162484/#P2_20162484_ver2.0/스크린샷, 2020-05-11 02-03-06.png
+	20162484/#P2_20162484_ver2.0/스크린샷, 2020-05-11 02-04-06.png
+	20162484/#P2_20162484_ver2.0/스크린샷, 2020-05-11 11-13-55.png
+	20162484/#P2_20162484_ver2.0/스크린샷, 2020-05-11 11-27-15.png
+	20162484/#P2_20162484_ver2.0/스크린샷, 2020-05-11 11-26-49.png
+	20162484/#P2_20162484_ver2.0/makefile
+	20162484/#P2_20162484_ver2.0/main.o
+	20162484/#P2_20162484_ver2.0/#P2_20162484_ver2.2.zip
+	20162484/#P2_20162484_ver2.0/log.txt
+	20162484/#P2_20162484_ver2.0/background.c
+	20162484/#P2_20162484_ver2.0/foreground.o
+	20162484/#P2_20162484_ver2.0/foreground.c
+	20162484/#P2_20162484_ver2.0/ssu_mntr
+	20162484/#P2_20162484_ver2.0/trash/
+	20162484/#P2_20162484_ver2.0/trash/files/
+	20162484/#P2_20162484_ver2.0/trash/files/b
+	20162484/#P2_20162484_ver2.0/trash/files/c
+	20162484/#P2_20162484_ver2.0/trash/files/c_1
+	20162484/#P2_20162484_ver2.0/trash/info/
+	20162484/#P2_20162484_ver2.0/trash/info/b
+	20162484/#P2_20162484_ver2.0/trash/info/c
+	20162484/#P2_20162484_ver2.0/trash/info/c_1
+	20162484/#P2_20162484_ver2.0/main.c
+	20162484/#P2_20162484_ver2.0/check/
+	20162484/#P2_20162484_ver2.0/check/a
+	20162484/#P2_20162484_ver1.7.zip
+	20162484/trash/
+	20162484/trash/files/
+	20162484/trash/files/q
+	20162484/trash/files/i
+	20162484/trash/files/h
+	20162484/trash/files/p
+	20162484/trash/files/u
+	20162484/trash/files/j
+	20162484/trash/files/l
+	20162484/trash/files/m
+	20162484/trash/files/o
+	20162484/trash/files/g
+	20162484/trash/files/r
+	20162484/trash/files/d
+	20162484/trash/files/f
+	20162484/trash/files/s
+	20162484/trash/files/k
+	20162484/trash/files/t
+	20162484/trash/files/patch.txt
+	20162484/trash/files/n
+	20162484/trash/files/e
+	20162484/trash/files/c
+	20162484/trash/info/
+	20162484/trash/info/q
+	20162484/trash/info/i
+	20162484/trash/info/h
+	20162484/trash/info/p
+	20162484/trash/info/u
+	20162484/trash/info/j
+	20162484/trash/info/l
+	20162484/trash/info/m
+	20162484/trash/info/o
+	20162484/trash/info/g
+	20162484/trash/info/r
+	20162484/trash/info/d
+	20162484/trash/info/f
+	20162484/trash/info/s
+	20162484/trash/info/k
+	20162484/trash/info/t
+	20162484/trash/info/patch.txt
+	20162484/trash/info/n
+	20162484/trash/info/e
+	20162484/trash/info/c
+	20162484/main.c
+	20162484/#P2_20162484_ver2.0.zip
+	20162484/check/
+	20162484/check/adadad/
+	20162484/check/echomsg.txt
+	20162484/check/asdsada/
+	20162484/check/asdsada/dasdas/
+	20162484/check/dir1/
+	20162484/check/dir1/nested/
+	20162484/check/dir1/nested2/
+	20162484/check/dasdsa/
+	foreground.c
+	test/
+	result.txt
+	main.c
+	version3.c
+[Fri Jun  5 00:19:31 2020] ./ssu_rsync -m main.c dst 
+	main.c 1631bytes
+	스크린샷, 2020-05-25 16-32-57.png delete
+	version5.c delete
+	version4.c delete
+	version3.c delete
+	test delete
+	tartest.c delete
+	result.zip delete
+	result.txt delete
+	record delete
+	person.h delete
+	makefile delete
+	foreground.c delete
+	backup.c delete
+	background.c delete
+	a.out delete
+	A20162484 delete
+	20162484 delete
+[Fri Jun  5 00:19:35 2020] ./ssu_rsync -r /home/goodtss/B17 dst 
+	스크린샷, 2020-05-15 19-42-20.png 40076bytes
+	스크린샷, 2020-05-15 19-34-08.png 42209bytes
+	스크린샷, 2020-05-15 19-17-41.png 42954bytes
+	스크린샷, 2020-05-15 19-17-39.png 2991350bytes
+	스크린샷, 2020-05-15 19-10-50.png 46699bytes
+	스크린샷, 2020-05-15 19-05-14.png 62747bytes
+	스크린샷, 2020-05-15 18-54-02.png 68019bytes
+	스크린샷, 2020-05-15 18-38-09.png 39981bytes
+	소스코드/ssu_pthread_self.c 842bytes
+	소스코드/ssu_pthread_join.c 934bytes
+	소스코드/ssu_pthread_exit_2.c 700bytes
+	소스코드/ssu_pthread_exit_1.c 768bytes
+	소스코드/ssu_pthread_equal.c 754bytes
+	소스코드/ssu_pthread_create_2.c 1587bytes
+	소스코드/ssu_pthread_create_1.c 817bytes
