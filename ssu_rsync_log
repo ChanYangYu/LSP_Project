@@ -423,3 +423,19 @@
 	소스코드/ssu_pthread_equal.c 754bytes
 	소스코드/ssu_pthread_create_2.c 1587bytes
 	소스코드/ssu_pthread_create_1.c 817bytes
+[Sun Jun  7 21:15:22 2020] ./ssu_rsync /home/goodtss/lsp dst 
+	스크린샷, 2020-05-25 16-32-57.png 1478398bytes
+	version5.c 1279bytes
+	version4.c 1288bytes
+	version3.c 1175bytes
+	tartest.c 231bytes
+	result.zip 2854bytes
+	result.txt 101bytes
+	record 512bytes
+	person.h 363bytes
+	makefile 179bytes
+	main.c 1353bytes
+	foreground.c 16290bytes
+	backup.c 5319bytes
+	background.c 2991bytes
+	a.out 8432bytes

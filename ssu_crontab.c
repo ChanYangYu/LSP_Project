@@ -42,18 +42,19 @@ int main(void)
 		}
 	}
 	gettimeofday(&begin, NULL);
-	while(!feof(fp)){
-		//파일내용 출력
-		memset(buf,0,BUFFER_SIZE);
-		fgets(buf,BUFFER_SIZE,fp);
-		printf("%s",buf);
-		//buf가 비어있지 않을경우
-		if(strlen(buf) != 0)
-			command_num++;
-	}
-	printf("\n");
 	while(1)
 	{
+		rewind(fp);
+		while(!feof(fp)){
+			//파일내용 출력
+			memset(buf,0,BUFFER_SIZE);
+			fgets(buf,BUFFER_SIZE,fp);
+			printf("%s",buf);
+			//buf가 비어있지 않을경우
+			if(strlen(buf) != 0)
+				command_num++;
+		}
+		printf("\n");
 		memset(buf,0,BUFFER_SIZE);
 		printf("20162484> ");
 		fgets(buf,BUFFER_SIZE,stdin);
@@ -153,15 +154,6 @@ void execute_add(FILE* fp, char* cmd)
 	//로그추가
 	fflush(fp);
 	//파일처음으로 이동
-	rewind(fp);
-	while(!feof(fp)){
-		//명령어 목록 출력
-		memset(buf,0,BUFFER_SIZE);
-		fgets(buf,BUFFER_SIZE,fp);
-		printf("%s",buf);
-		//buf가 비어있지 않을경우
-	}
-	printf("\n");
 }
 int check_run_cycle(char* cmd, int index)
 {
@@ -426,13 +418,6 @@ void execute_remove(FILE* fp, char* cmd)
 	//새파일로 다시 오픈
 	fopen("ssu_crontab_file","r+");
 
-	//변경된 내용 출력
-	while(!feof(fp)){
-		memset(buf,0,BUFFER_SIZE);
-		fgets(buf,BUFFER_SIZE,fp);
-		printf("%s",buf);
-	}
-	printf("\n");
 	//해당 명령어만 자름
 	ptr2 = strstr(cmd,".");
 	ptr2 +=2;

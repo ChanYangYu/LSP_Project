@@ -126,9 +126,10 @@ int check_execute(char* ptr, int num, int min_limit, int max_limit)
 				curr_num = atoi(number);
 				//전체값에서 curr_num(점프)하면서 일치하는지 비교
 				//범위가 *이므로 start, end범위값 limit값으로 대체
-				for(j = min_limit; j < max_limit; j+= curr_num){
+				//*/2인 경우 1,3,5,7~ */3인 경우 2,5,8,11~
+				for(j = min_limit + curr_num-1; j <= max_limit; j+= curr_num){
 					//해당하는 항목의 시간과 같으면
-					if(j == num )
+					if(j == num)
 						return 0;
 				}
 				//,문자일 경우 다음 문자로 이동
@@ -170,7 +171,8 @@ int check_execute(char* ptr, int num, int min_limit, int max_limit)
 						number[j++] = ptr[i++];
 					number[j] = '\0';
 					curr_num = atoi(number);
-					for(j = start_num; j < end_num; j+= curr_num){
+					//end_num포함
+					for(j = start_num + curr_num-1; j <= end_num; j+= curr_num){
 						//해당하는 항목의 시간과 같으면
 						if(j == num)
 							return 0;

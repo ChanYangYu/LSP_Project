@@ -15,3 +15,35 @@
 [Thu Jun  4 23:13:12 2020] remove * * * * * echo hello~
 [Thu Jun  4 23:13:46 2020] remove * * * * * cd DIR
 [Thu Jun  4 23:13:48 2020] remove * * * * * mkdir DIR
+[Sun Jun  7 21:25:57 2020] add */3 * * * * echo hello
+[Sun Jun  7 21:26:00 2020] run */3 * * * * echo hello
+[Sun Jun  7 21:27:28 2020] add * * * * * echo "echo every minute" > echomsg.txt
+[Sun Jun  7 21:28:00 2020] run * * * * * echo "echo every minute" > echomsg.txt
+[Sun Jun  7 21:28:14 2020] add 0 5 * * 0 echo "eho every sunday at 5am" > echomsg.txt
+[Sun Jun  7 21:28:42 2020] add 0 0,12 */2 * * "echo every two days at 0am, 12am" > echomsg.txt
+[Sun Jun  7 21:29:00 2020] run */3 * * * * echo hello
+[Sun Jun  7 21:29:00 2020] run * * * * * echo "echo every minute" > echomsg.txt
+[Sun Jun  7 21:30:00 2020] run * * * * * echo "echo every minute" > echomsg.txt
+[Sun Jun  7 21:30:59 2020] add * * */2 * * echo hi~
+[Sun Jun  7 21:31:00 2020] run * * * * * echo "echo every minute" > echomsg.txt
+[Sun Jun  7 21:31:24 2020] remove * * */2 * * echo hi~
+[Sun Jun  7 21:32:00 2020] run */3 * * * * echo hello
+[Sun Jun  7 21:32:00 2020] run * * * * * echo "echo every minute" > echomsg.txt
+[Sun Jun  7 21:32:22 2020] add * * */7 * * echo hi~
+[Sun Jun  7 21:33:00 2020] run * * * * * echo "echo every minute" > echomsg.txt
+[Sun Jun  7 21:33:00 2020] run * * */7 * * echo hi~
+[Sun Jun  7 21:34:00 2020] run * * * * * echo "echo every minute" > echomsg.txt
+[Sun Jun  7 21:34:00 2020] run * * */7 * * echo hi~
+[Sun Jun  7 21:35:00 2020] run */3 * * * * echo hello
+[Sun Jun  7 21:35:00 2020] run * * * * * echo "echo every minute" > echomsg.txt
+[Sun Jun  7 21:35:00 2020] run * * */7 * * echo hi~
+[Sun Jun  7 21:36:00 2020] run * * * * * echo "echo every minute" > echomsg.txt
+[Sun Jun  7 21:36:00 2020] run * * */7 * * echo hi~
+[Sun Jun  7 21:37:00 2020] run * * * * * echo "echo every minute" > echomsg.txt
+[Sun Jun  7 21:37:00 2020] run * * */7 * * echo hi~
+[Sun Jun  7 21:38:00 2020] run */3 * * * * echo hello
+[Sun Jun  7 21:38:00 2020] run * * * * * echo "echo every minute" > echomsg.txt
+[Sun Jun  7 21:38:00 2020] run * * */7 * * echo hi~
+[Sun Jun  7 21:39:00 2020] run * * * * * echo "echo every minute" > echomsg.txt
+[Sun Jun  7 21:39:00 2020] run * * */7 * * echo hi~
+[Sun Jun  7 21:39:46 2020] remove * * */7 * * echo hi~
