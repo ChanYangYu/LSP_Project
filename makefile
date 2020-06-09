@@ -12,7 +12,6 @@ ssu_rsync : ssu_rsync.c
 	$(CC) ssu_rsync.c -o ssu_rsync
 
 clean :
-	rm *.o
 	rm ssu_rsync
 	rm ssu_crond
 	rm ssu_crontab

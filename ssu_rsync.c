@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
 	//인자 개수 확인
 	if(argc < 3){
 		usage();
-		exit(1);
+        exit(1);
 	}
 	//옵션확인
 	if(!strcmp(argv[1],"-r")){
@@ -78,12 +78,12 @@ int main(int argc, char* argv[])
 	//src파일 존재여부 확인
 	if(access(argv[i],F_OK) != 0){
 		usage();
-		exit(1);
+        exit(1);
 	}
 	//src접근 권한확인
 	if(access(argv[i],R_OK) != 0){
 		usage();
-		exit(1);
+        exit(1);
 	}
 	//파일정보 stat함수로 받아옴
 	stat(argv[i], &statbuf);
@@ -94,29 +94,29 @@ int main(int argc, char* argv[])
 		//디렉토리의 경우 실행권한 확인
 		if(access(argv[i],X_OK) != 0){
 			usage();
-			exit(1);
+            exit(1);
 		}
 	}
 	//옵션값이 있을경우 4개이상, 없을경우 3개이상의 인덱스가 있어야함
 	if(argc < i+2){
 		usage();
-		exit(1);
+        exit(1);
 	}
 	//dst파일 파일 존재여부 확인
 	if(access(argv[i+1],F_OK) != 0){
 		usage();
-		exit(1);
+        exit(1);
 	}
 	stat(argv[i+1],&statbuf);
 	//dst가 디렉토리가 아니면 종료
 	if(!S_ISDIR(statbuf.st_mode)){
 		usage();
-		exit(1);
+        exit(1);
 	}
 	//실행권한 확인
 	if(access(argv[i+1],X_OK) != 0){
 		usage();
-		exit(1);
+        exit(1);
 	}
 	//경로 전역변수로 저장(signal 핸들러에서 사용)
 	memset(src_path, 0, BUFFER_SIZE);
@@ -124,7 +124,7 @@ int main(int argc, char* argv[])
 	strcpy(dst_path, argv[i+1]);
 	if((count = scandir(argv[i+1], &old_list, NULL, alphasort)) < 0){
 		fprintf(stderr,"scandir error in main()\n");
-		exit(1);
+        exit(1);
 	}
 	gettimeofday(&begin, NULL);
 	//sync수행
@@ -138,8 +138,8 @@ int main(int argc, char* argv[])
 	//임시파일들 모두 삭제
 	remove("ssu_rsync_log_temp");
 	remove("backup_2484.tar");
-    	gettimeofday(&end, NULL);
-    	runtime(&begin, &end);
+    gettimeofday(&end, NULL);
+    runtime(&begin, &end);
 	exit(0);
 }
 void sync_execute(char* src, char* dst)
@@ -164,7 +164,7 @@ void sync_execute(char* src, char* dst)
 	//백업파일 생성
 	if((pid = fork()) < 0){
 		fprintf(stderr,"fork() error in sync_execute\n");
-		exit(1);
+        exit(1);
 	}
 	else if(pid == 0)
 		execlp("tar","tar","-cf","backup_2484.tar","-C",dst,".",(char*)0);
@@ -195,7 +195,7 @@ void sync_execute(char* src, char* dst)
 				chdir(src);
 				if((pid = fork()) < 0){
 					fprintf(stderr,"fork() error in sync_execute\n");
-					exit(1);
+					raise(SIGINT);
 				}
 				else if(pid == 0){
 					sprintf(buf,"./%s",fname);
@@ -205,7 +205,7 @@ void sync_execute(char* src, char* dst)
 				sprintf(buf,"%s/src.tar",sub_path);
 				if(rename("src.tar", buf) < 0){
 					fprintf(stderr,"rename() error in sync_execute\n");
-					exit(1);
+					raise(SIGINT);
 				}
 				chdir(sub_path);
 				*ptr = backup;
@@ -215,7 +215,7 @@ void sync_execute(char* src, char* dst)
 				strcpy(src_path, "./");
 				if((pid = fork()) < 0){
 					fprintf(stderr,"fork() error in sync_execute\n");
-					exit(1);
+					raise(SIGINT);
 				}
 				else if(pid == 0){
 					sprintf(buf,"./%s",fname);
@@ -231,7 +231,7 @@ void sync_execute(char* src, char* dst)
 		//========lock=========
 		if((fd = open(src, O_RDONLY)) < 0){
 			fprintf(stderr,"open error in execute_sync()\n");
-			exit(1);
+			raise(SIGINT);
 		}
 		lock.l_type = F_WRLCK;
 		lock.l_start = 0;
@@ -252,7 +252,7 @@ void sync_execute(char* src, char* dst)
 					sprintf(buf,"%s/%s",dst, old_list[i]->d_name);
 					if(rmdirs(buf) < 0){
 						fprintf(stderr,"rmdirs() error in execute_sync\n");
-						exit(1);
+						raise(SIGINT);
 					}
 					continue;
 				}
@@ -282,14 +282,14 @@ void sync_execute(char* src, char* dst)
 				if(S_ISDIR(statbuf2.st_mode)){
 					if(rmdirs(buf) < 0){
 						fprintf(stderr,"rmdirs() error in execute_sync\n");
-						exit(1);
+						raise(SIGINT);
 					}
 				}
 				//파일일 경우
 				else{
 					if(remove(buf) < 0){
 						fprintf(stderr,"remove() error in execute_sync\n");
-						exit(1);
+						raise(SIGINT);
 					}
 				}
 			}
@@ -312,7 +312,7 @@ void sync_execute(char* src, char* dst)
 			sprintf(buf,"%s/%s", dst, fname);
 			if((fd2 = open(buf, O_RDWR|O_CREAT|O_TRUNC, statbuf1.st_mode &(S_IRWXU|S_IRWXG|S_IRWXO))) < 0){
 				fprintf(stderr,"copy-file creat fail\n");
-				exit(1);
+				raise(SIGINT);
 			}
 			//파일 내용복사
 			while((length = read(fd, buf, BUFFER_SIZE)) > 0)
@@ -324,7 +324,7 @@ void sync_execute(char* src, char* dst)
 			//수정시간 복사
 			if(utime(buf, &time_buf) < 0){
 				fprintf(stderr,"utime() error in execute_sync\n");
-				exit(1);
+				raise(SIGINT);
 			}
 		}
 		//=========unlock==========
@@ -338,13 +338,13 @@ void sync_execute(char* src, char* dst)
 		//src디렉토리 스캔
 		if((src_count = scandir(src,&src_list,NULL,alphasort)) < 0){
 			fprintf(stderr,"scandir error in sync_execute()\n");
-			exit(1);
+			raise(SIGINT);
 		}
 		if(is_tOption){
 			//tar명령 실행
 			if((pid = fork()) < 0){
 				fprintf(stderr,"fork() error in sync_execute\n");
-				exit(1);
+				raise(SIGINT);
 			}
 			else if(pid == 0)
 				execlp("tar","tar","-cf","src.tar","-C",src,".",(char*)0);
@@ -383,7 +383,7 @@ void sync_execute(char* src, char* dst)
 				sprintf(buf,"%s/%s",src,src_list[i]->d_name);
 				if((fd = open(buf, O_RDONLY)) < 0){
 					fprintf(stderr,"open error in execute_sync()\n");
-					exit(1);
+					raise(SIGINT);
 				}
 				lock.l_type = F_WRLCK;
 				lock.l_start = 0;
@@ -405,7 +405,7 @@ void sync_execute(char* src, char* dst)
 							sprintf(buf,"%s/%s",dst, old_list[j]->d_name);
 							if(rmdirs(buf) < 0){
 								fprintf(stderr,"rmdirs() error in execute_rsync\n");
-								exit(1);
+								raise(SIGINT);
 							}
 						}
 						//size, 수정시간이 같으면
@@ -436,7 +436,7 @@ void sync_execute(char* src, char* dst)
 				sprintf(buf,"%s/%s", dst, src_list[i]->d_name);
 				if((fd2 = open(buf, O_RDWR|O_CREAT|O_TRUNC, statbuf1.st_mode &(S_IRWXU|S_IRWXG|S_IRWXO))) < 0){
 					fprintf(stderr,"copy-file creat fail\n");
-					exit(1);
+					raise(SIGINT);
 				}
 				//파일 내용복사
 				while((length = read(fd, buf, BUFFER_SIZE)) > 0)
@@ -448,7 +448,7 @@ void sync_execute(char* src, char* dst)
 				//수정시간 복사
 				if(utime(buf, &time_buf) < 0){
 					fprintf(stderr,"utime() error in execute_sync\n");
-					exit(1);
+					raise(SIGINT);
 				}
 				//=========unlock==========
 				lock.l_type = F_UNLCK;
@@ -459,7 +459,7 @@ void sync_execute(char* src, char* dst)
 			if(is_mOption){
 				if((dst_count = scandir(dst,&dst_list,NULL,alphasort)) < 0){
 					fprintf(stderr,"scandir error in sync_execute()\n");
-					exit(1);
+					raise(SIGINT);
 				}
 				for(j = 0; j < dst_count; j++){
 					if(!strcmp(dst_list[j]->d_name, ".") || !strcmp(dst_list[j]->d_name, ".."))
@@ -483,7 +483,7 @@ void sync_execute(char* src, char* dst)
 							sprintf(buf,"%s/%s",dst, dst_list[j]->d_name);
 							if(stat(buf, &statbuf2) < 0){
 								fprintf(stderr,"stat() error in execute_rsync\n");
-								exit(1);
+								raise(SIGINT);
 							}
 							if(S_ISDIR(statbuf2.st_mode))
 								rmdirs(buf);
@@ -520,7 +520,7 @@ void record_log(int argc, char* argv[])
 		fd = open(fname, O_RDWR);
 	if((fd2 = open("ssu_rsync_log_temp", O_RDWR|O_CREAT|O_TRUNC, 0666)) < 0){
 		fprintf(stderr,"copy-file creat fail\n");
-		exit(1);
+		raise(SIGINT);
 	}
 	//파일 내용복사
 	while((length = read(fd, buf, BUFFER_SIZE)) > 0)
@@ -530,7 +530,7 @@ void record_log(int argc, char* argv[])
 	//파일 재오픈
 	if((fp = fopen(fname, "a+")) == NULL){
 		fprintf(stderr, "fopen error in record_log()\n");
-		exit(1);
+		raise(SIGINT);
 	}
 	time(&t);
 	ptr = ctime(&t);
@@ -594,7 +594,7 @@ void execute_rOption(char* src, char* dst, char* src_dir)
 	//서브디렉토리 스캔
 	if((count = scandir(buf,&f_list,NULL,alphasort)) < 0){
 		fprintf(stderr,"scandir error in execute_rOption()\n");
-		exit(1);
+		raise(SIGINT);
 	}
 	ptr = src_dir + strlen(src_dir);
 	*ptr++ = '/';
@@ -606,7 +606,7 @@ void execute_rOption(char* src, char* dst, char* src_dir)
 		sprintf(buf,"%s/%s%s",src, src_dir, f_list[i]->d_name);
 		if(stat(buf, &statbuf1) < 0){
 			fprintf(stderr,"stat error in execute_rOption()\n");
-			exit(1);
+			raise(SIGINT);
 		}
 		//src파일의 read접근권한확인 필수
 		if(access(buf,R_OK) != 0){
@@ -637,7 +637,7 @@ void execute_rOption(char* src, char* dst, char* src_dir)
 				//중복되는 디렉토리 삭제
 				if(rmdirs(buf) < 0){
 					fprintf(stderr,"rmdirs() error in execute_rOption\n");
-					exit(1);
+					raise(SIGINT);
 				}
 			}
 		}
@@ -645,7 +645,7 @@ void execute_rOption(char* src, char* dst, char* src_dir)
 		//========lock=========
 		if((fd = open(buf, O_RDONLY)) < 0){
 			fprintf(stderr,"open error in execute_sync()\n");
-			exit(1);
+			raise(SIGINT);
 		}
 		lock.l_type = F_WRLCK;
 		lock.l_start = 0;
@@ -670,7 +670,7 @@ void execute_rOption(char* src, char* dst, char* src_dir)
 		sprintf(buf,"%s/%s",dst,src_dir);
 		if((fd2 = open(buf, O_RDWR|O_CREAT|O_TRUNC, statbuf1.st_mode &(S_IRWXU|S_IRWXG|S_IRWXO))) < 0){
 			fprintf(stderr,"copy-file creat fail\n");
-			exit(1);
+			raise(SIGINT);
 		}
 		//파일 내용복사
 		while((length = read(fd, buf, BUFFER_SIZE)) > 0)
@@ -683,7 +683,7 @@ void execute_rOption(char* src, char* dst, char* src_dir)
 		//수정시간 복사
 		if(utime(buf, &time_buf) < 0){
 			fprintf(stderr,"utime() error in execute_sync\n");
-			exit(1);
+			raise(SIGINT);
 		}
 		//=========unlock==========
 		lock.l_type = F_UNLCK;
@@ -707,7 +707,7 @@ void sub_file_permission(char* dir_path)
 	//해당 dir 스캔
 	if((count = scandir(dir_path, &f_list, NULL, alphasort)) < 0){
 		fprintf(stderr,"scandir error in rOption_check_permission()\n");
-		exit(1);
+		raise(SIGINT);
 	}
 	//재귀로 탐색
 	for(i = 0; i < count; i++){
@@ -741,7 +741,7 @@ void execute_tOption(char* dst)
 	fd = open("tar_log.txt",O_RDWR|O_CREAT|O_TRUNC, 0666);
 	if((pid = fork()) < 0){
 		fprintf(stderr,"fork() error in execute_tOption()\n");
-		exit(1);
+		raise(SIGINT);
 	}
 	else if(pid == 0){
 		dup2(fd, 1);
@@ -760,14 +760,14 @@ void catch_signal(int signo)
 	//동기화중이던 dst디렉토리 삭제
 	if(rmdirs(dst_path) < 0){
 		fprintf(stderr,"rmdirs() error in catch_signal\n");
-		exit(1);
+		raise(SIGINT);
 	}
 	//dst디렉토리 생성
 	mkdir(dst_path, 0777);
 	//backup.tar 해당폴더 압축해제
 	if((pid = fork()) < 0){
 		fprintf(stderr,"fork() error in execute_tOption()\n");
-		exit(1);
+		raise(SIGINT);
 	}
 	else if(pid == 0)
 		execlp("tar", "tar", "-xf", "backup_2484.tar", "-C", dst_path,(char*)0);
@@ -797,7 +797,7 @@ int rmdirs(char* pathname){
 	//scan
 	if((count = scandir(pathname, &f_list, NULL, alphasort)) < 0){
 		fprintf(stderr,"scandir() error in rmdirs\n");
-		exit(1);
+		raise(SIGINT);
 	}
 	//빈디렉토리 일 경우
 	if(count == 2){
@@ -814,7 +814,7 @@ int rmdirs(char* pathname){
 		strcat(pathname, f_list[i]->d_name);
 		if(stat(pathname, &statbuf) < 0){
 			fprintf(stderr, "stat() error in rmdirs\n");
-			exit(1);
+			raise(SIGINT);
 		}
 		//디렉토리이면 재귀로 탐색하면서 삭제
 		if(S_ISDIR(statbuf.st_mode))

@@ -439,3 +439,45 @@
 	backup.c 5319bytes
 	background.c 2991bytes
 	a.out 8432bytes
+[Tue Jun  9 15:23:17 2020] ./ssu_rsync /etc/passwd dst 
+	passwd 2398bytes
+[Tue Jun  9 15:23:59 2020] ./ssu_rsync /home/ace/Chan/ dst 
+[Tue Jun  9 15:24:34 2020] ./ssu_rsync /home/ace/Chan/ dst 
+[Tue Jun  9 15:24:51 2020] ./ssu_rsync src dst 
+	source2.txt 23bytes
+	source1.c 23bytes
+[Tue Jun  9 15:28:51 2020] ./ssu_rsync /home/ace/Chan/LSP_Project/ dst 
+	ssu_rsync_log 13850bytes
+	ssu_rsync.c 23086bytes
+	ssu_rsync 27328bytes
+	ssu_crontab_log 3012bytes
+	ssu_crontab_file 203bytes
+	ssu_crontab.c 12490bytes
+	ssu_crontab 17856bytes
+	ssu_crond.c 5016bytes
+	ssu_crond 13344bytes
+	makefile 281bytes
+	echomsg.txt 18bytes
+	backup_2484.tar 56227840bytes
+	a.out 17856bytes
+[Tue Jun  9 15:29:33 2020] ./ssu_rsync /home/ace/Chan/LSP_Project/ dst 
+	ssu_rsync_log 14232bytes
+	backup_2484.tar 112599040bytes
+[Tue Jun  9 15:31:28 2020] ./ssu_rsync -r src dst 
+	dir1/sss 0bytes
+	dir1/nested/hello 0bytes
+	dir1/dir2/hi 0bytes
+[Tue Jun  9 15:31:54 2020] ./ssu_rsync -m src dst 
+	ssu_rsync_log delete
+	ssu_rsync.c delete
+	ssu_rsync delete
+	ssu_crontab_log delete
+	ssu_crontab_file delete
+	ssu_crontab.c delete
+	ssu_crontab delete
+	ssu_crond.c delete
+	ssu_crond delete
+	makefile delete
+	echomsg.txt delete
+	a.out delete
+	LSP_Project delete
