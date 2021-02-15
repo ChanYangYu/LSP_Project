@@ -2,3 +2,4 @@
 1. * * * * * echo "echo every minute" > echomsg.txt
 2. 0 5 * * 0 echo "eho every sunday at 5am" > echomsg.txt
 3. 0 0,12 */2 * * "echo every two days at 0am, 12am" > echomsg.txt
+4. * * * * * echo hi

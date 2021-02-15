@@ -481,3 +481,4 @@
 	echomsg.txt delete
 	a.out delete
 	LSP_Project delete
+[Tue Feb 16 01:12:49 2021] ./ssu_rsync src/ dst/ 

@@ -41,6 +41,14 @@ int main(void)
 			exit(1);
 		}
 	}
+	while(!feof(fp)){
+			//파일내용 출력
+			memset(buf,0,BUFFER_SIZE);
+			fgets(buf,BUFFER_SIZE,fp);
+			//buf가 비어있지 않을경우
+			if(strlen(buf) != 0)
+				command_num++;
+		}
 	gettimeofday(&begin, NULL);
 	while(1)
 	{
@@ -51,8 +59,6 @@ int main(void)
 			fgets(buf,BUFFER_SIZE,fp);
 			printf("%s",buf);
 			//buf가 비어있지 않을경우
-			if(strlen(buf) != 0)
-				command_num++;
 		}
 		printf("\n");
 		memset(buf,0,BUFFER_SIZE);
@@ -151,9 +157,8 @@ void execute_add(FILE* fp, char* cmd)
 	fprintf(fp, "%d. %s\n",command_num, cmd);
 	//명령어개수 증가
 	command_num++;
-	//로그추가
+	//명령어추가
 	fflush(fp);
-	//파일처음으로 이동
 }
 int check_run_cycle(char* cmd, int index)
 {
