@@ -5,7 +5,7 @@ ssu_rsync와 리눅스 시스템 상에서 사용자가 주기적으로 실행�
 
 ## ssu_crontab 프로그램 기본 사항
 - 사용자가 주기적으로 실행하는 명령어를 “ssu_crontab_file”에 저장 및 삭제하는 프로그램
-- 주기적으로 “ssu_crontab_file”에 저장된 명령어를 실행시킬 “ssu_crond” 디몬 프로그램
+- 주기적으로 “ssu_crontab_file”에 저장된 명령어를 실행시킬 “ssu_crond” 프로그램
   - “ssu_crond”는 운영체제 시작 시 함께 실행되어 “ssu_crontab_file”에 저장된 명령어를 주기적
 으로 실행시킴
 - “ssu_crontab_file”에 저장된 명령어가 정상적으로 수행된 경우만 “ssu_crontab_log”로그파일에
